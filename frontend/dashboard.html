@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CreditGuard — AI Loan Risk Assessment</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- ── Navbar ─────────────────────────────────────────────────── -->
+<nav class="navbar navbar-dark px-4 py-3 d-flex justify-content-between align-items-center">
+  <div class="d-flex align-items-center gap-2">
+    <div class="brand-icon"><i class="bi bi-shield-check"></i></div>
+    <div>
+      <div class="brand-name">CreditGuard</div>
+      <div class="brand-sub">AI Loan Risk Assessment</div>
+    </div>
+  </div>
+  <div class="d-flex gap-3 align-items-center">
+    <span class="nav-badge"><i class="bi bi-cpu me-1"></i>ML Powered</span>
+    <span class="nav-badge"><i class="bi bi-lightbulb me-1"></i>SHAP Explainable</span>
+    <a href="http://localhost:8000/docs" target="_blank" class="nav-link-btn">API Docs <i class="bi bi-box-arrow-up-right ms-1"></i></a>
+  </div>
+</nav>
+
+<!-- ── Hero ──────────────────────────────────────────────────── -->
+<div class="hero-strip">
+  <div class="container">
+    <div class="d-flex gap-4 align-items-center flex-wrap">
+      <div class="hero-stat"><div class="hero-stat-val">4</div><div class="hero-stat-label">ML Models</div></div>
+      <div class="hero-div"></div>
+      <div class="hero-stat"><div class="hero-stat-val">0.94</div><div class="hero-stat-label">Best AUC</div></div>
+      <div class="hero-div"></div>
+      <div class="hero-stat"><div class="hero-stat-val">17</div><div class="hero-stat-label">Features</div></div>
+      <div class="hero-div"></div>
+      <div class="hero-stat"><div class="hero-stat-val">SHAP</div><div class="hero-stat-label">Explainability</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Loading Overlay ───────────────────────────────────────── -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-box">
+    <div class="loading-spinner"></div>
+    <div class="loading-title">Analysing Credit Profile</div>
+    <div class="loading-steps" id="loadingSteps">
+      <div class="lstep active" id="ls1"><i class="bi bi-check-circle-fill"></i> Validating inputs</div>
+      <div class="lstep" id="ls2"><i class="bi bi-circle"></i> Running ML model</div>
+      <div class="lstep" id="ls3"><i class="bi bi-circle"></i> Generating SHAP explanation</div>
+      <div class="lstep" id="ls4"><i class="bi bi-circle"></i> Preparing results</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Main Content ──────────────────────────────────────────── -->
+<div class="container-xl py-4">
+  <div class="row g-4">
+
+    <!-- LEFT: Form -->
+    <div class="col-lg-5">
+      <div class="glass-card">
+        <div class="card-header-custom">
+          <i class="bi bi-person-vcard"></i>
+          <span>Loan Application</span>
+        </div>
+        <form id="loanForm" novalidate>
+
+          <!-- Personal -->
+          <div class="section-label">Personal Details</div>
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <label class="form-label">Age <span class="req">*</span></label>
+              <div class="input-icon-wrap">
+                <i class="bi bi-calendar3 inp-icon"></i>
+                <input type="number" class="form-control has-icon" id="age" min="18" max="75" placeholder="25–70" required>
+              </div>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Gender <span class="req">*</span></label>
+              <div class="input-icon-wrap">
+                <i class="bi bi-person inp-icon"></i>
+                <select class="form-select has-icon" id="gender" required>
+                  <option value="">Select</option>
+                  <option value="M">Male</option>
+                  <option value="F">Female</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Education Level</label>
+              <select class="form-select" id="education_type">
+                <option value="Higher education">Higher Education</option>
+                <option value="Secondary">Secondary / Vocational</option>
+                <option value="Incomplete higher">Incomplete Higher</option>
+                <option value="Lower secondary">Lower Secondary</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Income Type</label>
+              <select class="form-select" id="income_type">
+                <option value="Working">Working (Salaried)</option>
+                <option value="Commercial associate">Commercial Associate</option>
+                <option value="Pensioner">Pensioner</option>
+                <option value="State servant">State Servant</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Family Status</label>
+              <select class="form-select" id="family_status">
+                <option value="Married">Married</option>
+                <option value="Single">Single</option>
+                <option value="Civil marriage">Civil Marriage</option>
+                <option value="Separated">Separated</option>
+                <option value="Widow">Widow</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Housing Type</label>
+              <select class="form-select" id="housing_type">
+                <option value="House / apartment">Own House / Apartment</option>
+                <option value="Rented apartment">Rented Apartment</option>
+                <option value="With parents">Living with Parents</option>
+                <option value="Municipal apartment">Municipal Apartment</option>
+                <option value="Co-op apartment">Co-op Apartment</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Financial -->
+          <div class="section-label">Financial Details</div>
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <label class="form-label">Annual Income (₹) <span class="req">*</span></label>
+              <div class="input-icon-wrap">
+                <i class="bi bi-currency-rupee inp-icon"></i>
+                <input type="number" class="form-control has-icon" id="income" min="1" placeholder="e.g. 600000" required>
+              </div>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Loan Amount (₹) <span class="req">*</span></label>
+              <div class="input-icon-wrap">
+                <i class="bi bi-bank inp-icon"></i>
+                <input type="number" class="form-control has-icon" id="loan_amount" min="1" placeholder="e.g. 1200000" required>
+              </div>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Annual Repayment (₹) <span class="req">*</span></label>
+              <div class="input-icon-wrap">
+                <i class="bi bi-arrow-repeat inp-icon"></i>
+                <input type="number" class="form-control has-icon" id="annuity" min="1" placeholder="e.g. 55000" required>
+              </div>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Employment (Years)</label>
+              <div class="input-icon-wrap">
+                <i class="bi bi-briefcase inp-icon"></i>
+                <input type="number" class="form-control has-icon" id="employment_yrs" min="0" step="0.5" placeholder="e.g. 5">
+              </div>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Family Members</label>
+              <input type="range" class="form-range" id="family_members" min="1" max="10" value="2"
+                     oninput="document.getElementById('fm_val').textContent=this.value">
+              <div class="d-flex justify-content-between">
+                <span class="range-label">1</span>
+                <span class="range-val"><span id="fm_val">2</span> members</span>
+                <span class="range-label">10</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Credit Scores -->
+          <div class="section-label">External Credit Scores</div>
+          <div class="credit-score-note"><i class="bi bi-info-circle me-1"></i>Scores from credit bureaus (0 = worst, 1 = best). Leave blank if unknown.</div>
+          <div class="row g-3 mb-4">
+            <div class="col-4">
+              <label class="form-label">Bureau 1</label>
+              <input type="number" class="form-control text-center" id="ext_source_1" step="0.01" min="0" max="1" placeholder="0.00–1.00" value="0.65">
+              <div class="score-bar-wrap"><div class="score-bar" id="sb1" style="width:65%"></div></div>
+            </div>
+            <div class="col-4">
+              <label class="form-label">Bureau 2</label>
+              <input type="number" class="form-control text-center" id="ext_source_2" step="0.01" min="0" max="1" placeholder="0.00–1.00" value="0.72">
+              <div class="score-bar-wrap"><div class="score-bar" id="sb2" style="width:72%"></div></div>
+            </div>
+            <div class="col-4">
+              <label class="form-label">Bureau 3</label>
+              <input type="number" class="form-control text-center" id="ext_source_3" step="0.01" min="0" max="1" placeholder="0.00–1.00" value="0.75">
+              <div class="score-bar-wrap"><div class="score-bar" id="sb3" style="width:75%"></div></div>
+            </div>
+          </div>
+
+          <!-- DTI Preview -->
+          <div class="dti-preview" id="dtiPreview" style="display:none">
+            <div class="dti-row">
+              <span>Debt-to-Income (DTI)</span><strong id="dtiVal">–</strong>
+            </div>
+            <div class="dti-row">
+              <span>Loan-to-Income (LTI)</span><strong id="ltiVal">–</strong>
+            </div>
+          </div>
+
+          <div class="d-grid gap-2 mt-3">
+            <button type="submit" class="btn-assess">
+              <i class="bi bi-cpu me-2"></i>Assess Credit Risk
+            </button>
+            <button type="button" class="btn-reset" onclick="resetForm()">
+              <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- RIGHT: Results -->
+    <div class="col-lg-7">
+
+      <!-- Placeholder -->
+      <div class="placeholder-card" id="placeholderCard">
+        <div class="placeholder-icon"><i class="bi bi-graph-up-arrow"></i></div>
+        <div class="placeholder-title">Ready to Assess</div>
+        <div class="placeholder-text">Complete the application form on the left and click<br><strong>Assess Credit Risk</strong> to get an instant ML-powered prediction.</div>
+        <div class="placeholder-features">
+          <div class="pf-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Real-time prediction</div>
+          <div class="pf-item"><i class="bi bi-check-circle-fill text-success me-2"></i>SHAP explainability</div>
+          <div class="pf-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Risk categorisation</div>
+          <div class="pf-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Actionable recommendation</div>
+        </div>
+      </div>
+
+      <!-- Results (hidden until prediction) -->
+      <div id="resultSection" style="display:none">
+
+        <!-- Risk Summary -->
+        <div class="glass-card mb-3">
+          <div class="risk-summary">
+            <div class="risk-left">
+              <div class="risk-category-badge" id="riskBadge">–</div>
+              <div class="risk-prob-big" id="riskProb">–%</div>
+              <div class="risk-prob-label">Default Probability</div>
+              <div class="risk-rec" id="riskRec"></div>
+            </div>
+            <div class="risk-right">
+              <canvas id="gaugeCanvas" width="200" height="130"></canvas>
+              <div class="model-tag" id="modelTag">–</div>
+            </div>
+          </div>
+          <div class="risk-desc" id="riskDesc"></div>
+        </div>
+
+        <!-- SHAP Factors -->
+        <div class="glass-card mb-3">
+          <div class="card-header-custom">
+            <i class="bi bi-lightbulb"></i>
+            <span>Key Risk Factors <span class="shap-badge">SHAP Explainability</span></span>
+          </div>
+          <div class="shap-legend mb-3">
+            <span class="shap-leg-item shap-inc"><i class="bi bi-arrow-up-circle-fill"></i> Increases risk</span>
+            <span class="shap-leg-item shap-dec"><i class="bi bi-arrow-down-circle-fill"></i> Decreases risk</span>
+          </div>
+          <div id="shapFactors"></div>
+        </div>
+
+        <!-- Model Comparison -->
+        <div class="glass-card">
+          <div class="card-header-custom">
+            <i class="bi bi-bar-chart"></i>
+            <span>Model Performance Comparison</span>
+          </div>
+          <div id="modelComparison"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /row -->
+</div><!-- /container -->
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer class="footer-bar">
+  <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <span>CreditGuard — Final Year Project | Finance & Machine Learning</span>
+    <span>XGBoost · SHAP · FastAPI · AWS</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

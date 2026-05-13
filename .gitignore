@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+.env
+*.egg-info/
+.pytest_cache/
+
+# Model artifacts (large files)
+backend/ml/saved_models/*.pkl
+backend/ml/saved_models/*.json
+
+# OS
+.DS_Store
+*.swp
+
+# Docker
+*.log
+
+# Frontend build
+node_modules/

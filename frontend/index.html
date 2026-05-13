@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CreditGuard — AI Credit Risk Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#080b12;--surface:#0e1320;--card:#111827;
+      --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+      --text:#f0f4ff;--muted:#6b7a99;
+      --accent:#3b7ef8;--accent2:#7c5cbf;
+      --success:#22c55e;--warning:#f59e0b;--danger:#ef4444;
+      --serif:'DM Serif Display',Georgia,serif;
+      --sans:'DM Sans',system-ui,sans-serif;
+      --mono:'JetBrains Mono',monospace;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+    /* Grid background */
+    body::before{
+      content:'';position:fixed;inset:0;z-index:0;
+      background-image:
+        linear-gradient(rgba(59,126,248,0.04) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(59,126,248,0.04) 1px,transparent 1px);
+      background-size:44px 44px;pointer-events:none
+    }
+    body::after{
+      content:'';position:fixed;inset:0;z-index:0;
+      background:radial-gradient(ellipse 80% 60% at 50% 0%,transparent 40%,var(--bg) 100%);
+      pointer-events:none
+    }
+
+    /* ── Nav ── */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:18px 48px;
+      border-bottom:1px solid var(--border);
+      background:rgba(8,11,18,0.75);
+      backdrop-filter:blur(16px)
+    }
+    .logo{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:1.3rem;color:var(--text);text-decoration:none}
+    .logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:grid;place-items:center;font-size:16px}
+    .nav-pill{font-size:12px;color:var(--muted);background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:20px;padding:5px 14px;letter-spacing:.3px}
+    .btn-nav{font-family:var(--sans);font-size:13px;font-weight:500;color:#fff;background:var(--accent);border:none;border-radius:10px;padding:9px 20px;cursor:pointer;transition:opacity .2s,transform .1s;text-decoration:none;display:inline-block}
+    .btn-nav:hover{opacity:.88}
+    .btn-nav:active{transform:scale(.97)}
+
+    /* ── Hero ── */
+    .hero{
+      position:relative;z-index:1;min-height:100vh;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      text-align:center;padding:120px 24px 80px
+    }
+    .hero-orb{
+      position:absolute;width:600px;height:320px;top:50%;left:50%;
+      transform:translate(-50%,-60%);
+      background:radial-gradient(ellipse,rgba(59,126,248,0.13) 0%,transparent 70%);
+      pointer-events:none
+    }
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:7px;
+      font-family:var(--mono);font-size:11px;font-weight:500;
+      color:var(--accent);letter-spacing:2px;text-transform:uppercase;
+      border:1px solid rgba(59,126,248,0.3);border-radius:20px;padding:5px 14px;margin-bottom:28px;
+      background:rgba(59,126,248,0.07);
+      animation:fadeUp .6s ease both
+    }
+    .eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+
+    .hero-title{
+      font-family:var(--serif);
+      font-size:clamp(2.8rem,7vw,5.2rem);
+      line-height:1.08;margin-bottom:12px;
+      animation:fadeUp .7s .1s ease both
+    }
+    .hero-title em{
+      font-style:italic;
+      background:linear-gradient(135deg,#7dd3fc,var(--accent),var(--accent2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+    }
+    .hero-sub{
+      font-size:1.05rem;font-weight:300;color:var(--muted);line-height:1.7;
+      max-width:560px;margin:0 auto 40px;
+      animation:fadeUp .7s .2s ease both
+    }
+    .hero-sub strong{color:rgba(240,244,255,.7);font-weight:400}
+
+    .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fadeUp .7s .3s ease both}
+
+    .btn-primary{
+      font-family:var(--sans);font-size:15px;font-weight:500;
+      color:#fff;
+      background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);
+      border:none;border-radius:14px;padding:15px 34px;cursor:pointer;
+      text-decoration:none;display:inline-flex;align-items:center;gap:10px;
+      box-shadow:0 0 0 1px rgba(59,126,248,.4),0 8px 32px rgba(59,126,248,.2);
+      transition:transform .2s,box-shadow .2s,opacity .2s;
+      position:relative;overflow:hidden
+    }
+    .btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);opacity:0;transition:opacity .2s}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(59,126,248,.5),0 16px 40px rgba(59,126,248,.3)}
+    .btn-primary:hover::before{opacity:1}
+    .btn-primary:active{transform:translateY(0)}
+
+    .btn-secondary{
+      font-family:var(--sans);font-size:15px;font-weight:400;
+      color:var(--muted);background:transparent;
+      border:1px solid var(--border2);border-radius:14px;padding:15px 28px;cursor:pointer;
+      text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+      transition:border-color .2s,color .2s
+    }
+    .btn-secondary:hover{border-color:rgba(255,255,255,.25);color:var(--text)}
+    .arrow-icon{width:18px;height:18px;border:1.5px solid currentColor;border-radius:50%;display:grid;place-items:center;font-size:9px;flex-shrink:0}
+
+    /* Stat cards */
+    .stats-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:56px;animation:fadeUp .7s .45s ease both}
+    .stat-card{
+      background:rgba(255,255,255,.035);border:1px solid var(--border);
+      border-radius:14px;padding:16px 22px;text-align:left;min-width:120px;
+      backdrop-filter:blur(8px);transition:border-color .2s,transform .2s
+    }
+    .stat-card:hover{border-color:var(--border2);transform:translateY(-3px)}
+    .stat-val{font-family:var(--mono);font-size:1.55rem;font-weight:500;line-height:1;margin-bottom:5px}
+    .stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+
+    /* Scroll hint */
+    .scroll-hint{
+      position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;gap:6px;
+      font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;
+      animation:fadeUp .7s .7s ease both
+    }
+    .scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollDrop 1.6s ease-in-out infinite}
+    @keyframes scrollDrop{0%,100%{opacity:0;transform:scaleY(0);transform-origin:top}50%{opacity:1;transform:scaleY(1)}}
+
+    /* ── Features ── */
+    .section{position:relative;z-index:1;padding:100px 48px}
+    .section-label{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:14px}
+    .section-title{font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.15;margin-bottom:14px}
+    .section-sub{font-size:1rem;color:var(--muted);max-width:500px;line-height:1.7}
+
+    .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;margin-top:52px}
+    .feat-card{
+      background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px 26px;
+      position:relative;overflow:hidden;transition:border-color .25s,transform .25s
+    }
+    .feat-card:hover{border-color:rgba(59,126,248,.3);transform:translateY(-4px)}
+    .feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(59,126,248,.4),transparent);opacity:0;transition:opacity .25s}
+    .feat-card:hover::before{opacity:1}
+    .feat-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:20px;margin-bottom:18px}
+    .fi-blue{background:rgba(59,126,248,.12)} .fi-green{background:rgba(34,197,94,.12)}
+    .fi-amber{background:rgba(245,158,11,.12)} .fi-purple{background:rgba(124,92,191,.12)}
+    .fi-teal{background:rgba(20,184,166,.12)} .fi-red{background:rgba(239,68,68,.12)}
+    .feat-title{font-size:1rem;font-weight:500;margin-bottom:8px}
+    .feat-desc{font-size:.875rem;color:var(--muted);line-height:1.65}
+    .feat-tag{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:10px;color:var(--accent);border:1px solid rgba(59,126,248,.25);border-radius:6px;padding:3px 8px}
+
+    /* ── Model rows ── */
+    .models-strip{position:relative;z-index:1;padding:0 48px 100px}
+    .models-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;flex-wrap:wrap;gap:16px}
+    .model-row{
+      display:grid;grid-template-columns:200px 1fr 80px;
+      align-items:center;gap:16px;padding:16px 22px;margin-bottom:10px;
+      background:var(--card);border:1px solid var(--border);border-radius:14px;transition:border-color .2s
+    }
+    .model-row:hover{border-color:var(--border2)}
+    .model-row.best{border-color:rgba(59,126,248,.3)}
+    .model-name{font-size:14px;font-weight:500}
+    .model-type{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px}
+    .model-bar-wrap{height:6px;background:rgba(255,255,255,.06);border-radius:3px}
+    .model-bar{height:6px;border-radius:3px}
+    .model-auc{font-family:var(--mono);font-size:15px;font-weight:500;text-align:right}
+    .best-badge{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:10px;font-weight:500;color:var(--accent);background:rgba(59,126,248,.1);border:1px solid rgba(59,126,248,.2);border-radius:8px;padding:2px 8px;margin-left:8px}
+
+    /* ── CTA ── */
+    .cta-section{position:relative;z-index:1;padding:60px 48px 120px}
+    .cta-box{
+      background:var(--card);border:1px solid var(--border);border-radius:24px;
+      padding:64px 48px;text-align:center;position:relative;overflow:hidden;
+      max-width:800px;margin:0 auto
+    }
+    .cta-box::before{content:'';position:absolute;top:-80px;left:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(59,126,248,.15),transparent 70%);pointer-events:none}
+    .cta-box::after{content:'';position:absolute;bottom:-80px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,191,.15),transparent 70%);pointer-events:none}
+    .cta-title{font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;margin-bottom:16px}
+    .cta-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:480px;margin:0 auto 36px}
+    .risk-pills{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:36px}
+    .rpill{font-family:var(--mono);font-size:12px;font-weight:500;padding:6px 16px;border-radius:20px}
+    .rpill.low{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.25)}
+    .rpill.med{background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.25)}
+    .rpill.hi{background:rgba(239,68,68,.1);color:#ef4444;border:1px solid rgba(239,68,68,.25)}
+
+    /* ── Footer ── */
+    footer{
+      position:relative;z-index:1;border-top:1px solid var(--border);
+      padding:28px 48px;display:flex;justify-content:space-between;align-items:center;
+      flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted)
+    }
+    .footer-stack{display:flex;gap:8px;flex-wrap:wrap}
+    .stack-pill{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:3px 9px;font-family:var(--mono);font-size:10px}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+    @media(max-width:700px){
+      nav{padding:16px 20px}
+      .nav-pill{display:none}
+      .section,.models-strip,.cta-section{padding-left:20px;padding-right:20px}
+      .cta-box{padding:40px 22px}
+      .model-row{grid-template-columns:1fr 60px}
+      .model-bar-wrap{display:none}
+      .model-type{display:none}
+      footer{padding:20px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">🛡</div>
+    CreditGuard
+  </a>
+  <div style="display:flex;align-items:center;gap:16px">
+    <span class="nav-pill">Final Year Project · Finance &amp; ML</span>
+    <a href="dashboard.html" class="btn-nav">Launch App →</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-orb"></div>
+
+  <div class="eyebrow">
+    <span class="eyebrow-dot"></span>
+    AI-Powered Credit Intelligence
+  </div>
+
+  <h1 class="hero-title">
+    Know the risk<br>before the <em>loss</em>
+  </h1>
+
+  <p class="hero-sub">
+    <strong>CreditGuard</strong> is a machine learning system that predicts personal loan defaults in real time — with full SHAP explainability, so every decision comes with a reason.
+  </p>
+
+  <div class="hero-cta">
+    <a href="dashboard.html" class="btn-primary">
+      Get Started
+      <span class="arrow-icon">→</span>
+    </a>
+    <a href="#features" class="btn-secondary">
+      How it works <span style="font-size:14px">↓</span>
+    </a>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-val" style="color:var(--accent)">0.94</div><div class="stat-label">Best AUC</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--success)">4</div><div class="stat-label">ML Models</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#a78bfa">17</div><div class="stat-label">Features</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--warning)">SHAP</div><div class="stat-label">Explainability</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#34d399">AWS</div><div class="stat-label">Deployed</div></div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section" id="features">
+  <div class="section-label">Core Capabilities</div>
+  <h2 class="section-title">Built for real<br>lending decisions</h2>
+  <p class="section-sub">Every component is designed around the three things a credit officer actually needs: speed, accuracy, and an explainable reason.</p>
+
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon fi-blue">🧠</div>
+      <div class="feat-title">Four ML Models, One Champion</div>
+      <div class="feat-desc">Logistic Regression, Decision Tree, Random Forest, and XGBoost are trained and compared on the same dataset. The highest-AUC model serves every live prediction automatically.</div>
+      <div class="feat-tag">sklearn · xgboost</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon fi-green">📊</div>
+      <div class="feat-title">Real-Time Risk Scoring</div>
+      <div class="feat-desc">Enter an applicant's profile and receive a default probability in milliseconds, served from a FastAPI backend with the trained model pre-loaded in memory.</div>
+      <div class="feat-tag">FastAPI · Uvicorn</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon fi-amber">💡</div>
+      <div class="feat-title">SHAP Explainability</div>
+      <div class="feat-desc">Every prediction ships with a Shapley-based breakdown of feature contributions — showing exactly which factors drove the risk score up or down, in plain language.</div>
+      <div class="feat-tag">SHAP · TreeExplainer</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon fi-purple">⚖️</div>
+      <div class="feat-title">Regulatory-Grounded Categories</div>
+      <div class="feat-desc">Probabilities are mapped to Low / Medium / High risk bands using thresholds grounded in Basel III and RBI NPA guidelines, with a concrete lending recommendation for each.</div>
+      <div class="feat-tag">Basel III · RBI guidelines</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon fi-teal">🔢</div>
+      <div class="feat-title">Live Financial Ratio Engine</div>
+      <div class="feat-desc">DTI and LTI ratios are computed and colour-coded as you type — letting analysts spot red flags before the model even runs.</div>
+      <div class="feat-tag">DTI · LTI · Feature Eng.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon fi-red">☁️</div>
+      <div class="feat-title">Production AWS Deployment</div>
+      <div class="feat-desc">Frontend on S3 + CloudFront CDN. Backend on EC2 behind Nginx with SSL. Containerised with Docker. Auto-deploys via GitHub Actions CI/CD.</div>
+      <div class="feat-tag">EC2 · S3 · CloudFront</div>
+    </div>
+  </div>
+</section>
+
+<!-- Model comparison -->
+<section class="models-strip">
+  <div class="models-header">
+    <div>
+      <div class="section-label">Model Benchmark</div>
+      <h2 class="section-title" style="font-size:1.9rem">AUC-ROC comparison<br>across all four algorithms</h2>
+    </div>
+    <p style="font-size:.875rem;color:var(--muted);max-width:280px;line-height:1.6">15,000 samples, 5-fold cross-validation. The winner is automatically selected to serve live predictions.</p>
+  </div>
+
+  <div class="model-row best">
+    <div><div class="model-name">Logistic Regression <span class="best-badge">★ Serving</span></div><div class="model-type">LINEAR · INTERPRETABLE</div></div>
+    <div class="model-bar-wrap"><div class="model-bar" style="width:94%;background:linear-gradient(90deg,#3b7ef8,#7c5cbf)"></div></div>
+    <div class="model-auc" style="color:#3b7ef8">0.9396</div>
+  </div>
+  <div class="model-row">
+    <div><div class="model-name">XGBoost</div><div class="model-type">GRADIENT BOOSTING · ENSEMBLE</div></div>
+    <div class="model-bar-wrap"><div class="model-bar" style="width:93.9%;background:#22c55e88"></div></div>
+    <div class="model-auc" style="color:#22c55e">0.9386</div>
+  </div>
+  <div class="model-row">
+    <div><div class="model-name">Random Forest</div><div class="model-type">BAGGING · ENSEMBLE</div></div>
+    <div class="model-bar-wrap"><div class="model-bar" style="width:93.8%;background:#f59e0b88"></div></div>
+    <div class="model-auc" style="color:#f59e0b">0.9379</div>
+  </div>
+  <div class="model-row">
+    <div><div class="model-name">Decision Tree</div><div class="model-type">RULE-BASED · SINGLE TREE</div></div>
+    <div class="model-bar-wrap"><div class="model-bar" style="width:90.9%;background:#ef444488"></div></div>
+    <div class="model-auc" style="color:#ef4444">0.9093</div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-box">
+    <h2 class="cta-title">Assess your first<br>loan application</h2>
+    <p class="cta-sub">Enter a financial profile and get an instant ML-powered default prediction with a full SHAP breakdown — in under 300ms.</p>
+    <div class="risk-pills">
+      <span class="rpill low">✓ Low Risk — Approve</span>
+      <span class="rpill med">⚠ Medium Risk — Review</span>
+      <span class="rpill hi">✕ High Risk — Decline</span>
+    </div>
+    <a href="dashboard.html" class="btn-primary" style="font-size:16px;padding:16px 40px">
+      Open Risk Dashboard
+      <span class="arrow-icon">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div><span style="font-family:var(--serif)">CreditGuard</span> · Final Year Project · Finance &amp; Machine Learning</div>
+  <div class="footer-stack">
+    <span class="stack-pill">Python 3.11</span>
+    <span class="stack-pill">FastAPI</span>
+    <span class="stack-pill">XGBoost</span>
+    <span class="stack-pill">SHAP</span>
+    <span class="stack-pill">Bootstrap 5</span>
+    <span class="stack-pill">Docker</span>
+    <span class="stack-pill">AWS</span>
+  </div>
+</footer>
+
+</body>
+</html>
