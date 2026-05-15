@@ -12,10 +12,13 @@ import joblib, json, os
 # from app.config import settings
 # from app.routes import predict, health
 
-from backend.app.config import settings
-from backend.app.routes import predict, health
-from backend.app.models.schemas import LoanApplicationInput
+# from backend.app.config import settings
+# from backend.app.routes import predict, health
+# from backend.app.models.schemas import LoanApplicationInput
 
+from app.config import settings
+from app.routes import predict, health
+from app.models.schemas import LoanApplicationInput
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
