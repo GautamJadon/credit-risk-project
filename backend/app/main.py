@@ -49,10 +49,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve static assets (ROC curves, plots)
-static_dir = Path(__file__).parent.parent / "ml" / "static"
-static_dir.mkdir(exist_ok=True)
-app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+# # Serve static assets (ROC curves, plots)
+# static_dir = Path(__file__).parent.parent / "ml" / "static"
+# static_dir.mkdir(exist_ok=True)
+# app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 app.include_router(health.router,  prefix="/api/v1")
 app.include_router(predict.router, prefix="/api/v1")
