@@ -63,7 +63,7 @@ app.include_router(predict.router, prefix="/api/v1")
 @app.get("/", tags=["System"])
 def root():
     return {
-        "message": "Credit Risk Assessment API",
+        "message": "Credit Risk Assessment API - Render",
         "docs":    "/docs",
         "health":  "/api/v1/health",
         "predict": "/api/v1/predict  [POST]",
