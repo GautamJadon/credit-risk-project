@@ -180,6 +180,6 @@ See `docs/aws_deployment.md` for full step-by-step guide covering:
 ---
 
 ## 👤 Author
-Your Name — Final Year Project, [Your College], [Year]
+Gautam Jadon — Summer Internship Project, Delhi School of Business, 2025-27
 
-**Stack:** Python 3.11 · FastAPI · scikit-learn · XGBoost · SHAP · Bootstrap 5 · Docker · Nginx · AWS EC2 · S3 · CloudFront
+**Stack:** Python 3.12 · FastAPI · scikit-learn · XGBoost · SHAP · Bootstrap 5 · Docker · Nginx · AWS EC2 · S3 · CloudFront
