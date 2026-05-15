@@ -1,7 +1,7 @@
 'use strict';
 
 // const API_BASE = 'http://localhost:8000/api/v1';
-const API_BASE = 'https://credit-risk-project-qaya.onrender.com/api/v1';
+const API_BASE = 'https://credit-risk-project-qaya.onrender.com/';
 
 // ── Live DTI / LTI preview ─────────────────────────────────────────────────
 function updateDTI() {
