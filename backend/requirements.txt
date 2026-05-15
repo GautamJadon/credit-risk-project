@@ -12,3 +12,4 @@ matplotlib
 aiofiles
 python-multipart
 python-dotenv
+seaborn
