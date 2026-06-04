@@ -1,0 +1,44 @@
+{
+  "model_type": "LogisticRegression",
+  "best_model_name": "Logistic Regression",
+  "auc": 0.9396,
+  "cv_auc": 0.9377,
+  "feature_count": 17,
+  "features": [
+    "age",
+    "income",
+    "loan_amount",
+    "annuity",
+    "employment_yrs",
+    "ext_source_1",
+    "ext_source_2",
+    "ext_source_3",
+    "family_members",
+    "dti_ratio",
+    "lti_ratio",
+    "ext_source_mean",
+    "gender",
+    "education_type",
+    "income_type",
+    "family_status",
+    "housing_type"
+  ],
+  "comparison": {
+    "Logistic Regression": {
+      "auc": 0.9396,
+      "cv_auc": 0.9377
+    },
+    "Decision Tree": {
+      "auc": 0.9093,
+      "cv_auc": 0.8934
+    },
+    "Random Forest": {
+      "auc": 0.9379,
+      "cv_auc": 0.9362
+    },
+    "XGBoost": {
+      "auc": 0.9375,
+      "cv_auc": 0.9339
+    }
+  }
+}

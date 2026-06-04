@@ -198,4 +198,15 @@ if hasattr(best['model'], 'feature_importances_'):
     plt.close()
     print("   Feature importance saved → static/feature_importance.png")
 
+# Code for confusion matrix and classification report
+cm = confusion_matrix(y_test, best['y_pred'])
+plt.figure(figsize=(6,5))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=False)
+plt.xlabel('Predicted'); plt.ylabel('Actual')
+plt.title(f'Confusion Matrix — {best_name}')
+plt.tight_layout()
+plt.savefig('static/confusion_matrix.png', dpi=120, bbox_inches='tight')
+plt.close()
+print("   Confusion matrix saved → static/confusion_matrix.png")
+
 print("\n🎉 Training complete!")
