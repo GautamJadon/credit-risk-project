@@ -23,7 +23,7 @@ def build_feature_vector(data: LoanApplicationInput, feature_names: list) -> np.
     ext1         = float(data.ext_source_1 or 0.5)
     ext2         = float(data.ext_source_2 or 0.5)
     ext3         = float(data.ext_source_3 or 0.5)
-    dti_ratio    = annuity / (income + 1e-9)
+    dti_ratio    = annuity / ((income/12) + 1e-9)
     lti_ratio    = loan_amount / (income + 1e-9)
     ext_mean     = (ext1 + ext2 + ext3) / 3
 
