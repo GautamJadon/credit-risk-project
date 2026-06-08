@@ -46,16 +46,18 @@
 #         return contributions[:12]
 """
 SHAP Service: generates per-prediction feature explanations.
+
 Compatible with:
-- Logistic Regression
-- Decision Tree
-- Random Forest
 - XGBoost
+- Random Forest
+- Decision Tree
+- Logistic Regression
 - SHAP >= 0.50
 """
 
 import shap
 import numpy as np
+
 from backend.app.services.ml_service import FEATURE_LABELS
 
 
@@ -73,6 +75,7 @@ class SHAPService:
                     np.zeros((1, len(feature_names)))
                 )
                 self._tree = False
+
             else:
                 self.explainer = shap.TreeExplainer(model)
                 self._tree = True
@@ -83,35 +86,35 @@ class SHAPService:
 
     def explain(self, X_scaled: np.ndarray) -> list:
         """
-        Generate SHAP explanation for a single sample.
-        Returns top contributing features.
+        Generate SHAP explanation for a single prediction.
+        Returns top feature contributions.
         """
 
         if self.explainer is None:
             return []
 
         try:
-            shap_values = self.explainer(X_scaled)
 
-            # SHAP Explanation object
-            if hasattr(shap_values, "values"):
-                sv = shap_values.values
+            # ------------------------------------------------------
+            # Generate SHAP values
+            # ------------------------------------------------------
 
+            explanation = self.explainer(X_scaled)
+
+            if hasattr(explanation, "values"):
+                sv = explanation.values
             else:
-                sv = shap_values
+                sv = explanation
 
-            sv = np.array(sv)
+            sv = np.asarray(sv)
 
-            print("SHAP TYPE:", type(shap_values))
-            print("SHAP SHAPE:", sv.shape)
-
-            # ------------------------------------------------------------------
-            # Handle different SHAP output shapes
-            # ------------------------------------------------------------------
+            # ------------------------------------------------------
+            # Handle different SHAP output formats
+            # ------------------------------------------------------
 
             if sv.ndim == 3:
-                # Example RF output:
-                # (samples, features, classes)
+                # Binary classification
+                # Shape: (samples, features, classes)
 
                 if sv.shape[2] == 2:
                     shap_vals = sv[0, :, 1]
@@ -119,7 +122,7 @@ class SHAPService:
                     shap_vals = sv[0, :, 0]
 
             elif sv.ndim == 2:
-                # (samples, features)
+                # Shape: (samples, features)
                 shap_vals = sv[0]
 
             elif sv.ndim == 1:
@@ -127,8 +130,12 @@ class SHAPService:
 
             else:
                 raise ValueError(
-                    f"Unexpected SHAP shape: {sv.shape}"
+                    f"Unexpected SHAP output shape: {sv.shape}"
                 )
+
+            # ------------------------------------------------------
+            # Build response
+            # ------------------------------------------------------
 
             contributions = []
 
@@ -137,6 +144,7 @@ class SHAPService:
                 X_scaled[0],
                 shap_vals
             ):
+
                 contributions.append({
                     "feature": fname,
                     "label": FEATURE_LABELS.get(
@@ -149,7 +157,7 @@ class SHAPService:
                         "increases_risk"
                         if float(sval) > 0
                         else "decreases_risk"
-                    ),
+                    )
                 })
 
             contributions.sort(
@@ -160,9 +168,15 @@ class SHAPService:
             return contributions[:12]
 
         except Exception as e:
-            print(f"SHAP explanation failed: {repr(e)}")
 
-            # Fallback so API still returns predictions
+            print(
+                f"SHAP explanation failed: {repr(e)}"
+            )
+
+            # ------------------------------------------------------
+            # Fallback
+            # ------------------------------------------------------
+
             fallback = []
 
             for fname, fval in zip(
@@ -177,7 +191,7 @@ class SHAPService:
                     ),
                     "value": round(float(fval), 4),
                     "shap_value": 0.0,
-                    "direction": "decreases_risk",
+                    "direction": "decreases_risk"
                 })
 
             return fallback[:12]

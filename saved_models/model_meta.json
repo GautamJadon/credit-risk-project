@@ -1,8 +1,8 @@
 {
-  "model_type": "RandomForestClassifier",
-  "best_model_name": "Random Forest",
-  "auc": 0.9129,
-  "cv_auc": 0.9189,
+  "model_type": "XGBClassifier",
+  "best_model_name": "XGBoost",
+  "auc": 0.9299,
+  "cv_auc": 0.9243,
   "feature_count": 17,
   "features": [
     "age",
@@ -25,20 +25,20 @@
   ],
   "comparison": {
     "Logistic Regression": {
-      "auc": 0.9081,
-      "cv_auc": 0.915
+      "auc": 0.9244,
+      "cv_auc": 0.9253
     },
     "Decision Tree": {
-      "auc": 0.8246,
-      "cv_auc": 0.8644
+      "auc": 0.8742,
+      "cv_auc": 0.8422
     },
     "Random Forest": {
-      "auc": 0.9129,
-      "cv_auc": 0.9189
+      "auc": 0.9294,
+      "cv_auc": 0.9271
     },
     "XGBoost": {
-      "auc": 0.9097,
-      "cv_auc": 0.9143
+      "auc": 0.9299,
+      "cv_auc": 0.9243
     }
   }
 }
