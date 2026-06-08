@@ -48,7 +48,7 @@ async def predict(data: LoanApplicationInput, request: Request):
 @router.get("/model-info", tags=["System"])
 async def model_info(request: Request):
     """Return metadata about the loaded ML model."""
-    from app.models.schemas import ModelInfoResponse
+    from backend.app.models.schemas import ModelInfoResponse
     m = request.app.state.meta
     return ModelInfoResponse(
         model_type    = m.get('model_type',''),
