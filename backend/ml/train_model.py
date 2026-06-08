@@ -27,7 +27,7 @@ N = 15000
 print("🔧 Generating synthetic loan dataset...")
 
 age             = np.random.randint(21, 70, N)
-income          = np.random.lognormal(11.2, 0.6, N).clip(50000, 2000000)
+income          = np.random.lognormal(11.2, 0.6, N).clip(50000, 5000000)
 loan_amount     = np.random.lognormal(12.5, 0.7, N).clip(50000, 5000000)
 annuity         = loan_amount / np.random.uniform(18, 60, N)
 employment_yrs  = np.random.exponential(5, N).clip(0, 40)
