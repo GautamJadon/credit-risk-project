@@ -160,11 +160,11 @@ best_name = max(results, key=lambda n: results[n]['auc'])
 best      = results[best_name]
 print(f"\n✅ Best model: {best_name}  (AUC={best['auc']:.4f})")
 
-# os.makedirs('saved_models', exist_ok=True)
-joblib.dump(best['model'],  'backend/ml/saved_models/best_model.pkl')
-joblib.dump(scaler,          'backend/ml/saved_models/scaler.pkl')
-joblib.dump(encoders,        'backend/ml/saved_models/label_encoders.pkl')
-joblib.dump(FEATURES,        'backend/ml/saved_models/feature_names.pkl')
+os.makedirs('saved_models', exist_ok=True)
+joblib.dump(best['model'],  'saved_models/best_model.pkl')
+joblib.dump(scaler,          'saved_models/scaler.pkl')
+joblib.dump(encoders,        'saved_models/label_encoders.pkl')
+joblib.dump(FEATURES,        'saved_models/feature_names.pkl')
 
 # Save model metadata
 meta = {
@@ -179,7 +179,7 @@ meta = {
         for n, r in results.items()
     }
 }
-with open('backend/ml/saved_models/model_meta.json','w') as f:
+with open('saved_models/model_meta.json','w') as f:
     json.dump(meta, f, indent=2)
 print("   Artifacts saved: best_model.pkl, scaler.pkl, label_encoders.pkl, feature_names.pkl")
 
@@ -196,9 +196,9 @@ plt.title('ROC Curves — All Models')
 plt.legend(loc='lower right')
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
-plt.savefig('backend/ml/static/roc_curves.png', dpi=120, bbox_inches='tight')
+plt.savefig('static/roc_curves.png', dpi=120, bbox_inches='tight')
 plt.close()
-print("   ROC curve saved → backend/ml/static/roc_curves.png")
+print("   ROC curve saved → static/roc_curves.png")
 
 # ── Plot Feature Importance ────────────────────────────────────
 if hasattr(best['model'], 'feature_importances_'):
@@ -209,9 +209,9 @@ if hasattr(best['model'], 'feature_importances_'):
     plt.xlabel('Feature Importance')
     plt.title(f'Top 15 Feature Importances — {best_name}')
     plt.tight_layout()
-    plt.savefig('backend/ml/static/feature_importance.png', dpi=120, bbox_inches='tight')
+    plt.savefig('static/feature_importance.png', dpi=120, bbox_inches='tight')
     plt.close()
-    print("   Feature importance saved → backend/ml/static/feature_importance.png")
+    print("   Feature importance saved → static/feature_importance.png")
 
 # Code for confusion matrix and classification report
 cm = confusion_matrix(y_test, best['y_pred'])
@@ -220,8 +220,8 @@ sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=False)
 plt.xlabel('Predicted'); plt.ylabel('Actual')
 plt.title(f'Confusion Matrix — {best_name}')
 plt.tight_layout()
-plt.savefig('backend/ml/static/confusion_matrix.png', dpi=120, bbox_inches='tight')
+plt.savefig('static/confusion_matrix.png', dpi=120, bbox_inches='tight')
 plt.close()
-print("   Confusion matrix saved → backend/ml/static/confusion_matrix.png")
+print("   Confusion matrix saved → static/confusion_matrix.png")
 
 print("\n🎉 Training complete!")
