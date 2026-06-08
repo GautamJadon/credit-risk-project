@@ -1,8 +1,8 @@
 {
-  "model_type": "LogisticRegression",
-  "best_model_name": "Logistic Regression",
-  "auc": 0.9635,
-  "cv_auc": 0.9708,
+  "model_type": "RandomForestClassifier",
+  "best_model_name": "Random Forest",
+  "auc": 0.9129,
+  "cv_auc": 0.9189,
   "feature_count": 17,
   "features": [
     "age",
@@ -25,20 +25,20 @@
   ],
   "comparison": {
     "Logistic Regression": {
-      "auc": 0.9635,
-      "cv_auc": 0.9708
+      "auc": 0.9081,
+      "cv_auc": 0.915
     },
     "Decision Tree": {
-      "auc": 0.9289,
-      "cv_auc": 0.9355
+      "auc": 0.8246,
+      "cv_auc": 0.8644
     },
     "Random Forest": {
-      "auc": 0.9618,
-      "cv_auc": 0.9677
+      "auc": 0.9129,
+      "cv_auc": 0.9189
     },
     "XGBoost": {
-      "auc": 0.9617,
-      "cv_auc": 0.9674
+      "auc": 0.9097,
+      "cv_auc": 0.9143
     }
   }
 }

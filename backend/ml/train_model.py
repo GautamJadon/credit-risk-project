@@ -71,20 +71,19 @@ ext_mean   = (ext1 + ext2 + ext3) / 3
 # )
 
 log_odds = (
-    -3.5
-    + 0.025  * (age - 40)
-    - 0.003  * (income / 10000)
-    + 0.001  * (loan_amount / 10000)
-    + 2.5    * dti.clip(0, 3)        # was 1.8 → increase DTI penalty
-    + 1.5    * lti.clip(0, 5)        # was 0.9 → increase LTI penalty
-    - 5.0    * ext_mean              # was -3.5 → poor credit scores hurt more
-    - 0.08   * employment_yrs
-    + 0.12   * (family_members > 4).astype(float)
-    + np.where(education == 'Lower secondary', 0.5, 0)
-    + np.where(income_type == 'Pensioner', 0.3, 0)
-    + np.random.normal(0, 0.4, N)
+    -7.5
+    + 0.015  * (age - 40)
+    - 0.005  * (income / 10000)
+    + 0.0005 * (loan_amount / 10000)
+    + 1.8    * dti.clip(0, 3)
+    + 0.9    * lti.clip(0, 5)
+    - 4.0    * ext_mean
+    - 0.06   * employment_yrs
+    + 0.10   * (family_members > 4).astype(float)
+    + np.where(education == 'Lower secondary', 0.3, 0)
+    + np.where(income_type == 'Pensioner', 0.2, 0)
+    + np.random.normal(0, 0.3, N)
 )
-
 prob_default = 1 / (1 + np.exp(-log_odds))
 target = (np.random.uniform(0, 1, N) < prob_default).astype(int)
 
