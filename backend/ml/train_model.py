@@ -71,7 +71,7 @@ ext_mean   = (ext1 + ext2 + ext3) / 3
 # )
 
 log_odds = (
-    -7.5
+    -6.5
     + 0.015  * (age - 40)
     - 0.005  * (income / 10000)
     + 0.0005 * (loan_amount / 10000)
