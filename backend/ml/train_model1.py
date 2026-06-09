@@ -59,16 +59,28 @@ ext_mean   = (ext1 + ext2 + ext3) / 3
 
 print(f"   Avg DTI in dataset: {dti.mean():.3f}  |  Median: {np.median(dti):.3f}")
 print(f"   Avg LTI in dataset: {lti.mean():.3f}  |  Median: {np.median(lti):.3f}")
-exit()
 
+# log_odds = (
+#     -6.0
+#     + 0.015  * (age - 40)
+#     - 0.005  * (income / 10000)
+#     + 0.0005 * (loan_amount / 10000)
+#     + 1.8    * dti.clip(0, 3)
+#     + 0.9    * lti.clip(0, 5)
+#     - 4.0    * ext_mean
+#     - 0.06   * employment_yrs
+#     + 0.10   * (family_members > 4).astype(float)
+#     + np.where(education == 'Lower secondary', 0.3, 0)
+#     + np.where(income_type == 'Pensioner', 0.2, 0)
+#     + np.random.normal(0, 0.3, N)
+# )
 
 log_odds = (
-    -6.0
+    -3.0                             # raise intercept significantly
     + 0.015  * (age - 40)
-    - 0.005  * (income / 10000)
-    + 0.0005 * (loan_amount / 10000)
-    + 1.8    * dti.clip(0, 3)
-    + 0.9    * lti.clip(0, 5)
+    - 0.002  * (income / 10000)
+    + 2.5    * dti.clip(0, 2)        # DTI now 0.1–0.6, needs stronger weight
+    + 0.8    * lti.clip(0, 5)        # LTI now 0.5–5.0, keep moderate
     - 4.0    * ext_mean
     - 0.06   * employment_yrs
     + 0.10   * (family_members > 4).astype(float)
@@ -76,11 +88,12 @@ log_odds = (
     + np.where(income_type == 'Pensioner', 0.2, 0)
     + np.random.normal(0, 0.3, N)
 )
+
 prob_default = 1 / (1 + np.exp(-log_odds))
 target = (np.random.uniform(0, 1, N) < prob_default).astype(int)
 
 print(f"   Default rate: {target.mean()*100:.1f}%  (target: ~8–12%)")
-
+exit()
 df = pd.DataFrame({
     'age': age,
     'income': income,
