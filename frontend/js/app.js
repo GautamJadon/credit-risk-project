@@ -164,11 +164,18 @@ function drawGauge(prob, color) {
   const valueA = startA + prob * Math.PI;
 
   // Track segments (low / medium / high)
+  // const segs = [
+  //   [Math.PI,       Math.PI * 1.33, '#16a34a33'],
+  //   [Math.PI * 1.33, Math.PI * 1.67, '#d9770633'],
+  //   [Math.PI * 1.67, Math.PI * 2,   '#dc262633'],
+  // ];
+
   const segs = [
-    [Math.PI,       Math.PI * 1.33, '#16a34a33'],
-    [Math.PI * 1.33, Math.PI * 1.67, '#d9770633'],
-    [Math.PI * 1.67, Math.PI * 2,   '#dc262633'],
+    [Math.PI,        Math.PI * 1.15, '#16a34a33'],  // LOW:    0–15%
+    [Math.PI * 1.15, Math.PI * 1.60, '#d9770633'],  // MEDIUM: 15–40%  
+    [Math.PI * 1.60, Math.PI * 2,    '#dc262633'],  // HIGH:   40–100%
   ];
+
   segs.forEach(([s, e, c]) => {
     ctx.beginPath(); ctx.arc(cx, cy, r, s, e);
     ctx.strokeStyle = c; ctx.lineWidth = 20; ctx.stroke();
