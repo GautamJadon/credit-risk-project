@@ -232,10 +232,10 @@ function drawGauge(prob, color) {
   ctx.strokeStyle = '#ffffff11';
   ctx.lineWidth = 22;
   ctx.stroke();
-  
+
   // ── Coloured segments ────────────────────────────────
   const segs = [
-      [Math.PI,        Math.PI * 1.15, '#16a34a99'],  // LOW    0–15%
+      [Math.PI,        Math.PI * 1.15, '#16a34a77'],  // LOW    0–15%
       [Math.PI * 1.15, Math.PI * 1.60, '#d9770699'],  // MEDIUM 15–60%
       [Math.PI * 1.60, Math.PI * 2,    '#dc262699'],  // HIGH   60–100%
   ];
@@ -243,7 +243,7 @@ function drawGauge(prob, color) {
       ctx.beginPath();
       ctx.arc(cx, cy, r, s, e);
       ctx.strokeStyle = c;
-      ctx.lineWidth = 18;
+      ctx.lineWidth = 16;
       ctx.lineCap = 'butt';
       ctx.stroke();
   });
