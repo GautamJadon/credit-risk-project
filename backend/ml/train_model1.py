@@ -29,10 +29,9 @@ print("🔧 Generating synthetic loan dataset...")
 age             = np.random.randint(21, 70, N)
 income          = np.random.lognormal(11.2, 0.6, N).clip(50000, 5000000)
 # loan_amount     = np.random.lognormal(12.5, 0.7, N).clip(50000, 5000000)
-loan_amount     = income * np.random.uniform(0.5, 5.0, N)
+loan_amount = income * np.random.uniform(0.5, 5.0, N)
 # annuity         = loan_amount / np.random.uniform(18, 60, N)
 annuity         = (income * np.random.uniform(0.1, 0.6, N)) / 12
-
 employment_yrs  = np.random.exponential(5, N).clip(0, 40)
 ext1            = np.random.beta(4, 2, N)
 ext2            = np.random.beta(3, 2, N)
@@ -58,20 +57,10 @@ dti        = annuity / (income / 12)
 lti        = loan_amount / income
 ext_mean   = (ext1 + ext2 + ext3) / 3
 
-# log_odds = (
-#     -3.5
-#     + 0.025  * (age - 40)
-#     - 0.003  * (income / 10000)
-#     + 0.001  * (loan_amount / 10000)
-#     + 1.8    * dti.clip(0, 3)
-#     + 0.9    * lti.clip(0, 5)
-#     - 3.5    * ext_mean
-#     - 0.08   * employment_yrs
-#     + 0.12   * (family_members > 4).astype(float)
-#     + np.where(education == 'Lower secondary', 0.5, 0)
-#     + np.where(income_type == 'Pensioner', 0.3, 0)
-#     + np.random.normal(0, 0.4, N)
-# )
+print(f"   Avg DTI in dataset: {dti.mean():.3f}  |  Median: {np.median(dti):.3f}")
+print(f"   Avg LTI in dataset: {lti.mean():.3f}  |  Median: {np.median(lti):.3f}")
+exit()
+
 
 log_odds = (
     -6.0
