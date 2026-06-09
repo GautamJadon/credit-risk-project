@@ -153,6 +153,57 @@ function displayResults(data) {
 }
 
 // ── Gauge canvas ───────────────────────────────────────────────────────────
+// function drawGauge(prob, color) {
+//   const canvas = document.getElementById('gaugeCanvas');
+//   const ctx    = canvas.getContext('2d');
+//   const W = canvas.width, H = canvas.height;
+//   ctx.clearRect(0, 0, W, H);
+
+//   const cx = W / 2, cy = H - 20, r = 80;
+//   const startA = Math.PI, endA = 2 * Math.PI;
+//   const valueA = startA + prob * Math.PI;
+
+//   // Track segments (low / medium / high)
+//   // const segs = [
+//   //   [Math.PI,       Math.PI * 1.33, '#16a34a33'],
+//   //   [Math.PI * 1.33, Math.PI * 1.67, '#d9770633'],
+//   //   [Math.PI * 1.67, Math.PI * 2,   '#dc262633'],
+//   // ];
+
+//   const segs = [
+//     [Math.PI,        Math.PI * 1.15, '#16a34a33'],  // LOW:    0–15%
+//     [Math.PI * 1.15, Math.PI * 1.60, '#d9770633'],  // MEDIUM: 15–40%  
+//     [Math.PI * 1.60, Math.PI * 2,    '#dc262633'],  // HIGH:   40–100%
+//   ];
+
+//   segs.forEach(([s, e, c]) => {
+//     ctx.beginPath(); ctx.arc(cx, cy, r, s, e);
+//     ctx.strokeStyle = c; ctx.lineWidth = 20; ctx.stroke();
+//   });
+
+//   // Value arc
+//   ctx.beginPath(); ctx.arc(cx, cy, r, startA, valueA);
+//   ctx.strokeStyle = color; ctx.lineWidth = 20;
+//   ctx.lineCap = 'round'; ctx.stroke();
+
+//   // Needle
+//   const angle = startA + prob * Math.PI;
+//   const nx = cx + (r - 22) * Math.cos(angle);
+//   const ny = cy + (r - 22) * Math.sin(angle);
+//   ctx.beginPath(); ctx.moveTo(cx, cy);
+//   ctx.lineTo(nx, ny);
+//   ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5;
+//   ctx.lineCap = 'round'; ctx.stroke();
+//   ctx.beginPath(); ctx.arc(cx, cy, 5, 0, 2*Math.PI);
+//   ctx.fillStyle = '#fff'; ctx.fill();
+
+//   // Labels
+//   ctx.font = '10px system-ui'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
+//   ctx.fillText('Low', cx - 74, cy + 14);
+//   ctx.fillText('Mid', cx, cy - 84);
+//   ctx.fillText('High', cx + 74, cy + 14);
+// }
+
 function drawGauge(prob, color) {
   const canvas = document.getElementById('gaugeCanvas');
   const ctx    = canvas.getContext('2d');
@@ -160,47 +211,45 @@ function drawGauge(prob, color) {
   ctx.clearRect(0, 0, W, H);
 
   const cx = W / 2, cy = H - 20, r = 80;
-  const startA = Math.PI, endA = 2 * Math.PI;
-  const valueA = startA + prob * Math.PI;
 
-  // Track segments (low / medium / high)
-  // const segs = [
-  //   [Math.PI,       Math.PI * 1.33, '#16a34a33'],
-  //   [Math.PI * 1.33, Math.PI * 1.67, '#d9770633'],
-  //   [Math.PI * 1.67, Math.PI * 2,   '#dc262633'],
-  // ];
-
+  // ── Background segments ──────────────────────────────
   const segs = [
-    [Math.PI,        Math.PI * 1.15, '#16a34a33'],  // LOW:    0–15%
-    [Math.PI * 1.15, Math.PI * 1.60, '#d9770633'],  // MEDIUM: 15–40%  
-    [Math.PI * 1.60, Math.PI * 2,    '#dc262633'],  // HIGH:   40–100%
+    [Math.PI,        Math.PI * 1.15, '#16a34a55'],  // LOW    0–15%
+    [Math.PI * 1.15, Math.PI * 1.60, '#d9770655'],  // MEDIUM 15–40%
+    [Math.PI * 1.60, Math.PI * 2,    '#dc262655'],  // HIGH   40–100%
   ];
-
   segs.forEach(([s, e, c]) => {
-    ctx.beginPath(); ctx.arc(cx, cy, r, s, e);
-    ctx.strokeStyle = c; ctx.lineWidth = 20; ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, s, e);
+    ctx.strokeStyle = c;
+    ctx.lineWidth = 20;
+    ctx.stroke();
   });
 
-  // Value arc
-  ctx.beginPath(); ctx.arc(cx, cy, r, startA, valueA);
-  ctx.strokeStyle = color; ctx.lineWidth = 20;
-  ctx.lineCap = 'round'; ctx.stroke();
-
-  // Needle
-  const angle = startA + prob * Math.PI;
-  const nx = cx + (r - 22) * Math.cos(angle);
-  const ny = cy + (r - 22) * Math.sin(angle);
-  ctx.beginPath(); ctx.moveTo(cx, cy);
+  // ── Needle only (no value arc) ────────────────────────
+  const angle = Math.PI + prob * Math.PI;
+  const nx = cx + (r - 10) * Math.cos(angle);
+  const ny = cy + (r - 10) * Math.sin(angle);
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
   ctx.lineTo(nx, ny);
-  ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5;
-  ctx.lineCap = 'round'; ctx.stroke();
-  ctx.beginPath(); ctx.arc(cx, cy, 5, 0, 2*Math.PI);
-  ctx.fillStyle = '#fff'; ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round';
+  ctx.stroke();
 
-  // Labels
-  ctx.font = '10px system-ui'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
-  ctx.fillText('Low', cx - 74, cy + 14);
-  ctx.fillText('Mid', cx, cy - 84);
+  // ── Centre dot ───────────────────────────────────────
+  ctx.beginPath();
+  ctx.arc(cx, cy, 5, 0, 2 * Math.PI);
+  ctx.fillStyle = '#fff';
+  ctx.fill();
+
+  // ── Labels ───────────────────────────────────────────
+  ctx.font = '10px system-ui';
+  ctx.fillStyle = '#94a3b8';
+  ctx.textAlign = 'center';
+  ctx.fillText('Low',  cx - 74, cy + 14);
+  ctx.fillText('Mid',  cx,      cy - 84);
   ctx.fillText('High', cx + 74, cy + 14);
 }
 
