@@ -1,8 +1,8 @@
 {
   "model_type": "LogisticRegression",
   "best_model_name": "Logistic Regression",
-  "auc": 0.8061,
-  "cv_auc": 0.784,
+  "auc": 0.8077,
+  "cv_auc": 0.8137,
   "feature_count": 17,
   "features": [
     "age",
@@ -25,20 +25,20 @@
   ],
   "comparison": {
     "Logistic Regression": {
-      "auc": 0.8061,
-      "cv_auc": 0.784
+      "auc": 0.8077,
+      "cv_auc": 0.8137
     },
     "Decision Tree": {
-      "auc": 0.705,
-      "cv_auc": 0.665
+      "auc": 0.7267,
+      "cv_auc": 0.6933
     },
     "Random Forest": {
-      "auc": 0.79,
-      "cv_auc": 0.7713
+      "auc": 0.7887,
+      "cv_auc": 0.7956
     },
     "XGBoost": {
-      "auc": 0.7722,
-      "cv_auc": 0.7574
+      "auc": 0.7749,
+      "cv_auc": 0.7829
     }
   }
 }

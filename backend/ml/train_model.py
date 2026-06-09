@@ -92,17 +92,17 @@ print(f"   Avg LTI in dataset: {lti.mean():.3f}  |  Median: {np.median(lti):.3f}
 # )
 
 log_odds = (
-    -3.0                              # raise intercept significantly
+    -2.0                              # raise intercept significantly
     + 0.015  * (age - 40)
     - 0.002  * (income / 10000)
     + 2.5    * dti.clip(0, 2)        # DTI now 0.1–0.6, needs stronger weight
     + 0.8    * lti.clip(0, 5)        # LTI now 0.5–5.0, keep moderate
-    - 4.0    * ext_mean
-    - 0.06   * employment_yrs
+    - 6.0    * ext_mean
+    - 0.08   * employment_yrs
     + 0.10   * (family_members > 4).astype(float)
     + np.where(education == 'Lower secondary', 0.3, 0)
     + np.where(income_type == 'Pensioner', 0.2, 0)
-    + np.random.normal(0, 0.3, N)
+    + np.random.normal(0, 0.2, N)
 )
 
 prob_default = 1 / (1 + np.exp(-log_odds))
