@@ -210,7 +210,7 @@ function drawGauge(prob, color) {
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
 
-  const cx = W / 2, cy = H - 20, r = 60;
+  const cx = W / 2, cy = H - 20, r = 80;
 
   // // ── Background segments ──────────────────────────────
   // const segs = [
@@ -232,7 +232,7 @@ function drawGauge(prob, color) {
   ctx.strokeStyle = '#ffffff11';
   ctx.lineWidth = 22;
   ctx.stroke();
-
+  
   // ── Coloured segments ────────────────────────────────
   const segs = [
       [Math.PI,        Math.PI * 1.15, '#16a34a99'],  // LOW    0–15%
@@ -270,9 +270,9 @@ function drawGauge(prob, color) {
   ctx.font = '10px system-ui';
   ctx.fillStyle = '#94a3b8';
   ctx.textAlign = 'center';
-  ctx.fillText('Low',  cx - 54, cy + 14);
-  ctx.fillText('Mid',  cx,      cy - 64);
-  ctx.fillText('High', cx + 54, cy + 14);
+  ctx.fillText('Low',  cx - 74, cy + 14);
+  ctx.fillText('Mid',  cx,      cy - 84);
+  ctx.fillText('High', cx + 74, cy + 14);
 }
 
 // ── SHAP factors ───────────────────────────────────────────────────────────
