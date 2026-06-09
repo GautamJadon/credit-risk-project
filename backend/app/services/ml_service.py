@@ -80,7 +80,7 @@ def categorize_risk(probability: float) -> dict:
             'recommendation': 'Approve with standard interest rate.',
             'description': 'Strong repayment profile. High creditworthiness indicated by external scores and income metrics.',
         }
-    elif probability < 0.40:
+    elif probability < 0.50:
         return {
             'category': 'MEDIUM RISK',
             'color': '#d97706',

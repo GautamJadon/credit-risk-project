@@ -172,8 +172,8 @@ function displayResults(data) {
 
 //   const segs = [
 //     [Math.PI,        Math.PI * 1.15, '#16a34a33'],  // LOW:    0–15%
-//     [Math.PI * 1.15, Math.PI * 1.60, '#d9770633'],  // MEDIUM: 15–40%  
-//     [Math.PI * 1.60, Math.PI * 2,    '#dc262633'],  // HIGH:   40–100%
+//     [Math.PI * 1.15, Math.PI * 1.50, '#d9770633'],  // MEDIUM: 15–50%  
+//     [Math.PI * 1.50, Math.PI * 2,    '#dc262633'],  // HIGH:   50–100%
 //   ];
 
 //   segs.forEach(([s, e, c]) => {
@@ -215,8 +215,8 @@ function drawGauge(prob, color) {
   // ── Background segments ──────────────────────────────
   const segs = [
     [Math.PI,        Math.PI * 1.15, '#16a34a55'],  // LOW    0–15%
-    [Math.PI * 1.15, Math.PI * 1.60, '#d9770655'],  // MEDIUM 15–40%
-    [Math.PI * 1.60, Math.PI * 2,    '#dc262655'],  // HIGH   40–100%
+    [Math.PI * 1.15, Math.PI * 1.50, '#d9770655'],  // MEDIUM 15–50%
+    [Math.PI * 1.50, Math.PI * 2,    '#dc262655'],  // HIGH   50–100%
   ];
   segs.forEach(([s, e, c]) => {
     ctx.beginPath();
