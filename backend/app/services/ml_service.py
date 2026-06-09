@@ -49,15 +49,38 @@ def build_feature_vector(data: LoanApplicationInput, feature_names: list) -> np.
     return np.array([[raw[f] for f in feature_names]])
 
 
+# def categorize_risk(probability: float) -> dict:
+#     if probability < 0.30:
+#         return {
+#             'category': 'LOW RISK',
+#             'color': '#16a34a',
+#             'recommendation': 'Approve with standard interest rate.',
+#             'description': 'Strong repayment profile. High creditworthiness indicated by external scores and income metrics.',
+#         }
+#     elif probability < 0.60:
+#         return {
+#             'category': 'MEDIUM RISK',
+#             'color': '#d97706',
+#             'recommendation': 'Approve with enhanced monitoring or slightly higher interest rate.',
+#             'description': 'Moderate default risk. Recommend verifying income documents and employment status.',
+#         }
+#     else:
+#         return {
+#             'category': 'HIGH RISK',
+#             'color': '#dc2626',
+#             'recommendation': 'Decline loan or require collateral / guarantor.',
+#             'description': 'High probability of default based on DTI ratio, external credit scores, and income profile.',
+#         }
+
 def categorize_risk(probability: float) -> dict:
-    if probability < 0.30:
+    if probability < 0.15:
         return {
             'category': 'LOW RISK',
             'color': '#16a34a',
             'recommendation': 'Approve with standard interest rate.',
             'description': 'Strong repayment profile. High creditworthiness indicated by external scores and income metrics.',
         }
-    elif probability < 0.60:
+    elif probability < 0.40:
         return {
             'category': 'MEDIUM RISK',
             'color': '#d97706',
