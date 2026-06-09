@@ -230,7 +230,7 @@ function drawGauge(prob, color) {
   ctx.beginPath();
   ctx.arc(cx, cy, r, Math.PI, Math.PI * 2);
   ctx.strokeStyle = '#ffffff11';
-  ctx.lineWidth = 22;
+  ctx.lineWidth = 12;
   ctx.stroke();
 
   // ── Coloured segments ────────────────────────────────
