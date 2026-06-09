@@ -212,18 +212,40 @@ function drawGauge(prob, color) {
 
   const cx = W / 2, cy = H - 20, r = 80;
 
-  // ── Background segments ──────────────────────────────
+  // // ── Background segments ──────────────────────────────
+  // const segs = [
+  //   [Math.PI,        Math.PI * 1.15, '#16a34a55'],  // LOW    0–15%
+  //   [Math.PI * 1.15, Math.PI * 1.50, '#d9770655'],  // MEDIUM 15–50%
+  //   [Math.PI * 1.50, Math.PI * 2,    '#dc262655'],  // HIGH   50–100%
+  // ];
+  // segs.forEach(([s, e, c]) => {
+  //   ctx.beginPath();
+  //   ctx.arc(cx, cy, r, s, e);
+  //   ctx.strokeStyle = c;
+  //   ctx.lineWidth = 20;
+  //   ctx.stroke();
+  // });
+
+  // ── Background track (dark) ──────────────────────────
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, Math.PI, Math.PI * 2);
+  ctx.strokeStyle = '#ffffff11';
+  ctx.lineWidth = 22;
+  ctx.stroke();
+  
+  // ── Coloured segments ────────────────────────────────
   const segs = [
-    [Math.PI,        Math.PI * 1.15, '#16a34a55'],  // LOW    0–15%
-    [Math.PI * 1.15, Math.PI * 1.50, '#d9770655'],  // MEDIUM 15–50%
-    [Math.PI * 1.50, Math.PI * 2,    '#dc262655'],  // HIGH   50–100%
+      [Math.PI,        Math.PI * 1.15, '#16a34a99'],  // LOW    0–15%
+      [Math.PI * 1.15, Math.PI * 1.60, '#d9770699'],  // MEDIUM 15–60%
+      [Math.PI * 1.60, Math.PI * 2,    '#dc262699'],  // HIGH   60–100%
   ];
   segs.forEach(([s, e, c]) => {
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, s, e);
-    ctx.strokeStyle = c;
-    ctx.lineWidth = 20;
-    ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, s, e);
+      ctx.strokeStyle = c;
+      ctx.lineWidth = 18;
+      ctx.lineCap = 'butt';
+      ctx.stroke();
   });
 
   // ── Needle only (no value arc) ────────────────────────
